@@ -149,8 +149,12 @@ export default {
         this.loadingUpdate = true;
 
         for (let i = 0; i < this.tournaments.length; i++) {
-          const { id } = this.tournaments[i];
-          await api.post("/torneios/atualizar", { id });
+          const tournament = this.tournaments[i];
+
+          if (tournament.drawDate && tournament.startDate) {
+            const { id } = tournament;
+            await api.post("/torneios/atualizar", { id });
+          }
         }
 
         await this.loadTournaments();

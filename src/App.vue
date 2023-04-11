@@ -1,7 +1,7 @@
 <template>
   <div class="main-app">
     <Header v-if="user" />
-    <div v-if="validatingToken"></div>
+    <Loading v-if="validatingToken" />
     <Content v-else />
   </div>
 </template>
@@ -9,6 +9,7 @@
 <script>
 import Header from "./components/template/Header";
 import Content from "./components/template/Content.vue";
+import Loading from "./components/template/Loading.vue";
 
 import api from "./config/api";
 
@@ -17,7 +18,7 @@ import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "App",
-  components: { Header, Content },
+  components: { Header, Content, Loading },
   computed: {
     ...mapState({
       user: (state) => state.user,
