@@ -35,8 +35,15 @@ import TournamentCreate from "@/components/tournaments/TournamentCreate.vue";
 import api from "@/config/api";
 import { showError, showSuccess } from "@/global";
 
+import { mapState } from "vuex";
+
 export default {
   components: { Tournaments, TournamentCreate },
+  computed: {
+    ...mapState({
+      user: (state) => state.user,
+    }),
+  },
   data() {
     return {
       tournaments: [],
@@ -53,7 +60,8 @@ export default {
     },
     async loadTournaments() {
       try {
-        const response = await api.get("/torneios");
+        console.log(this.user.id);
+        const response = await api.get(`/torneios?ownerId=${this.user.id}`);
 
         if (response && response.data) {
           this.tournaments = response.data;

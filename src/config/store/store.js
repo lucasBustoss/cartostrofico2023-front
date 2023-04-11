@@ -22,6 +22,7 @@ export default new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user;
+      console.log(user)
 
       if (user) {
         api.defaults.headers.common['user_id'] = `${user.id}`;
