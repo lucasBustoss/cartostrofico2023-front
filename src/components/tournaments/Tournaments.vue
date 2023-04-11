@@ -43,6 +43,7 @@
             <TournamentTeams
               :tournament="tournament"
               :loadingAdd="loadingAdd"
+              :currentDeleteTeamId="currentDeleteTeamId"
               @addTeam="addTeam"
               @deleteTeam="deleteTeam"
             />
@@ -114,7 +115,13 @@ import TournamentInfo from "./Info/TournamentInfo.vue";
 import TournamentTeams from "./Info/TournamentTeams.vue";
 
 export default {
-  props: ["tournaments", "loadingDraw", "loadingAdd", "loadingUpdate"],
+  props: [
+    "tournaments",
+    "loadingDraw",
+    "loadingAdd",
+    "loadingUpdate",
+    "currentDeleteTeamId",
+  ],
   components: { TournamentInfo, TournamentTeams },
   computed: {},
   data() {
@@ -195,7 +202,6 @@ export default {
         tournament.currentPhase !== "group"
       ) {
         const index = this.phases.indexOf(this.currentPhase);
-        console.log(index);
 
         if (index !== 0) {
           this.currentPhase = this.phases[index - 1];
@@ -219,7 +225,6 @@ export default {
         tournament.currentPhase !== "group"
       ) {
         const index = this.phases.indexOf(this.currentPhase);
-        console.log(index);
 
         if (index !== 3) {
           this.currentPhase = this.phases[index + 1];

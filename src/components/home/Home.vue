@@ -12,6 +12,7 @@
         :loadingDraw="loadingDraw"
         :loadingAdd="loadingAdd"
         :loadingUpdate="loadingUpdate"
+        :currentDeleteTeamId="currentDeleteTeamId"
         @createTournament="createTournament"
         @drawTournament="drawTournament"
         @addTeam="addTeam"
@@ -53,6 +54,7 @@ export default {
       loadingCreate: false,
       loadingAdd: false,
       loadingUpdate: false,
+      currentDeleteTeamId: null,
     };
   },
   methods: {
@@ -61,7 +63,6 @@ export default {
     },
     async loadTournaments() {
       try {
-        console.log(this.user.id);
         const response = await api.get(`/torneios?ownerId=${this.user.id}`);
 
         if (response && response.data) {
@@ -120,6 +121,7 @@ export default {
     },
     async deleteTeam(data) {
       try {
+        this.currentDeleteTeamId = data.teamId;
         const response = await api.post("/torneios/excluirTime", data);
 
         if (response && response.data) {
@@ -130,6 +132,8 @@ export default {
       } catch (err) {
         showError(err);
       }
+
+      this.currentDeleteTeamId = null;
     },
     async updatePoints() {
       try {

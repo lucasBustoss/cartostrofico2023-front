@@ -15,14 +15,12 @@ export default new Vuex.Store({
       if (info) {
         api.defaults.headers.common['Authorization'] = `${info.token}`;
       } else {
-        console.log('to por aqui tbm')
         delete api.defaults.headers.common['Authorization'];
         state.isMenuVisible = false;
       }
     },
     setUser(state, user) {
       state.user = user;
-      console.log(user)
 
       if (user) {
         api.defaults.headers.common['user_id'] = `${user.id}`;

@@ -68,7 +68,10 @@
       </v-col>
       <v-col cols="2" class="tournament-team-coach">{{ team.coach }}</v-col>
       <v-col cols="1" class="tournament-team-delete"
-        ><v-btn class="button-delete" @click="deleteTeam(team)"
+        ><v-btn
+          class="button-delete"
+          :loading="currentDeleteTeamId === team.teamId"
+          @click="deleteTeam(team)"
           >Excluir</v-btn
         ></v-col
       >
@@ -80,7 +83,7 @@ import api from "@/config/api";
 import { showError } from "@/global";
 
 export default {
-  props: ["tournament", "loadingAdd"],
+  props: ["tournament", "loadingAdd", "currentDeleteTeamId"],
   data() {
     return {
       searchTeams: [],
@@ -132,8 +135,8 @@ export default {
         this.$refs["team-autocomplete"].value = "";
       }
     },
-    deleteTeam(team) {
-      this.$emit("deleteTeam", {
+    async deleteTeam(team) {
+      await this.$emit("deleteTeam", {
         tournamentId: this.tournament.id,
         teamId: team.teamId,
       });
