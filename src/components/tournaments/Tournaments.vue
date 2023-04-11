@@ -42,8 +42,9 @@
 
             <TournamentTeams
               :tournament="tournament"
-              @addTeam="addTeam"
               :loadingAdd="loadingAdd"
+              @addTeam="addTeam"
+              @deleteTeam="deleteTeam"
             />
           </div>
           <div v-else class="tournament-content">
@@ -53,22 +54,24 @@
                   v-if="tournament.type === 'mesclado'"
                   class="tournament-standing-group-title"
                 >
-                  <i
-                    class="fas fa-chevron-left change-group"
+                  <v-icon
+                    class="group-picker"
                     @click="previousGroup(tournament)"
                     v-show="showPreviousPicker(tournament)"
-                  />
+                    >{{ "mdi-arrow-left-thick" }}</v-icon
+                  >
                   <div v-if="tournament.currentPhase === 'group'">
                     {{ `Grupo ${currentGroup}` }}
                   </div>
                   <div v-if="tournament.currentPhase !== 'group'">
                     {{ getCurrentPhase(currentPhase) }}
                   </div>
-                  <i
-                    class="fas fa-chevron-right change-group"
+                  <v-icon
+                    class="group-picker"
                     @click="nextGroup(tournament)"
                     v-show="showNextPicker(tournament)"
-                  />
+                    >{{ "mdi-arrow-right-thick" }}</v-icon
+                  >
                 </div>
                 <div>
                   <div
@@ -132,6 +135,9 @@ export default {
     },
     addTeam(data) {
       this.$emit("addTeam", data);
+    },
+    deleteTeam(data) {
+      this.$emit("deleteTeam", data);
     },
     showPhaseInfo(tournament) {
       const index = this.phases.indexOf(this.currentPhase);
@@ -320,5 +326,11 @@ export default {
 
 .search-team-info {
   margin-left: 10px;
+}
+
+.group-picker {
+  cursor: pointer;
+  font-size: 1rem !important;
+  margin: 0 10px;
 }
 </style>

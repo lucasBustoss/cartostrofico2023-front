@@ -15,6 +15,7 @@
         @createTournament="createTournament"
         @drawTournament="drawTournament"
         @addTeam="addTeam"
+        @deleteTeam="deleteTeam"
         @updatePoints="updatePoints"
       />
     </v-col>
@@ -116,6 +117,19 @@ export default {
       }
 
       this.loadingAdd = false;
+    },
+    async deleteTeam(data) {
+      try {
+        const response = await api.post("/torneios/excluirTime", data);
+
+        if (response && response.data) {
+          await this.loadTournaments();
+        }
+
+        showSuccess("Time excluído com sucesso!");
+      } catch (err) {
+        showError(err);
+      }
     },
     async updatePoints() {
       try {

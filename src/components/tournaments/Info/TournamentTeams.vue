@@ -52,6 +52,7 @@
       <v-col cols="1" class="tournament-team-logo"> Logo </v-col>
       <v-col cols="3" class="tournament-team-name"> Nome do time </v-col>
       <v-col cols="2" class="tournament-team-coach"> Treinador </v-col>
+      <v-col cols="2" class="tournament-team-delete"> Excluir? </v-col>
     </div>
 
     <div
@@ -66,6 +67,11 @@
         <div>{{ team.name }}</div>
       </v-col>
       <v-col cols="2" class="tournament-team-coach">{{ team.coach }}</v-col>
+      <v-col cols="1" class="tournament-team-delete"
+        ><v-btn class="button-delete" @click="deleteTeam(team)"
+          >Excluir</v-btn
+        ></v-col
+      >
     </div>
   </div>
 </template>
@@ -126,6 +132,12 @@ export default {
         this.$refs["team-autocomplete"].value = "";
       }
     },
+    deleteTeam(team) {
+      this.$emit("deleteTeam", {
+        tournamentId: this.tournament.id,
+        teamId: team.teamId,
+      });
+    },
   },
 };
 </script>
@@ -180,8 +192,21 @@ export default {
   border-left: 1px solid #777;
   padding: 300px !important;
 }
-.tournament-team-coach {
-  border-right: 1px solid #777;
+
+.tournament-team-delete {
+  border: 1px solid #777;
+  height: 37px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.button-delete {
+  font-size: 0.6rem !important;
+  height: 25px !important;
+  background: rgb(201, 71, 71) !important;
+  color: #fff !important;
 }
 
 .tournament-add-team-header-title {

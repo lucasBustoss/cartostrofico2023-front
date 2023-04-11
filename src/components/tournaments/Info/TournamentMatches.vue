@@ -3,19 +3,21 @@
     <h3 class="tournament-matches-title">Jogos</h3>
 
     <div class="tournament-matches-round">
-      <i
-        class="fas fa-chevron-left"
+      <v-icon
+        class="round-picker"
         @click="previousRound"
         v-show="currentRound > 1"
-      />
+        >{{ "mdi-arrow-left-thick" }}</v-icon
+      >
       <div class="tournament-matches-round-info">
         Rodada {{ currentRound }} de {{ totalRounds }}
       </div>
-      <i
-        class="fas fa-chevron-right"
+      <v-icon
+        class="round-picker"
         @click="nextRound"
         v-show="currentRound < totalRounds"
-      />
+        >{{ "mdi-arrow-right-thick" }}</v-icon
+      >
     </div>
 
     <div class="tournament-matches-list">
@@ -139,9 +141,8 @@ export default {
   height: 30px;
 }
 
-.fa-chevron-left,
-.fa-chevron-right {
+.round-picker {
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1rem !important;
 }
 </style>
