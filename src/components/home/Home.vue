@@ -6,7 +6,11 @@
       <v-divider></v-divider>
     </v-col>
 
-    <v-col cols="12" v-if="tournaments.length > 0 && !create">
+    <v-col cols="12" v-if="loadingTournaments">
+      <Loading />
+    </v-col>
+
+    <v-col cols="12" v-else-if="tournaments.length > 0 && !create">
       <Tournaments
         :tournaments="tournaments"
         :loadingDraw="loadingDraw"
@@ -31,6 +35,7 @@
   </div>
 </template>
 <script>
+import Loading from "@/components/template/Loading.vue";
 import Tournaments from "@/components/tournaments/Tournaments.vue";
 import TournamentCreate from "@/components/tournaments/TournamentCreate.vue";
 
@@ -40,7 +45,7 @@ import { showError, showSuccess } from "@/global";
 import { mapState } from "vuex";
 
 export default {
-  components: { Tournaments, TournamentCreate },
+  components: { Tournaments, TournamentCreate, Loading },
   computed: {
     ...mapState({
       user: (state) => state.user,
@@ -54,6 +59,7 @@ export default {
       loadingCreate: false,
       loadingAdd: false,
       loadingUpdate: false,
+      loadingTournaments: false,
       currentDeleteTeamId: null,
     };
   },
@@ -63,6 +69,7 @@ export default {
     },
     async loadTournaments() {
       try {
+        this.loadingTournaments = true;
         const response = await api.get(`/torneios?ownerId=${this.user.id}`);
 
         if (response && response.data) {
@@ -71,6 +78,8 @@ export default {
       } catch (err) {
         showError(err);
       }
+
+      this.loadingTournaments = false;
     },
     async saveTournament(tournament) {
       try {
