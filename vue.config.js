@@ -5,4 +5,4 @@ module.exports = defineConfig({
   ]
 })
 
-module.exports = { chainWebpack: config => { config.plugin('html').tap(args => { args[0].title = 'Planejamento do trade'; return args; }); } }
+module.exports = { chainWebpack: config => { config.plugin('html').tap(args => { args[0].title = 'Cartostrófico - 2023'; return args; }); } }
