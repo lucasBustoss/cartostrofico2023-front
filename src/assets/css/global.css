@@ -26,3 +26,7 @@ body {
   /* Non-prefixed version, currently
   supported by Chrome, Edge, Opera and Firefox */
 }
+
+.v-messages__message {
+  color: red;
+}

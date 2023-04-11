@@ -3,7 +3,7 @@
     <v-progress-circular
       :size="size || 100"
       indeterminate
-      :style="`color: ${color || 'yellow'} !important`"
+      :style="`color: ${color || 'grey'} !important`"
     ></v-progress-circular>
   </div>
 </template>

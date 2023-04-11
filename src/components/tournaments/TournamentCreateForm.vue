@@ -1,12 +1,13 @@
 <template>
   <div class="tournament-create-form">
-    <form>
+    <v-form ref="tournament">
       <h3 class="tournament-create-form-data-title">Dados do campeonato</h3>
       <div class="tournament-create-form-section">
         <v-col cols="5">
           <v-text-field
             v-model="tournament.name"
             label="Nome do campeonato"
+            :rules="tournamentNameRules"
             required
           ></v-text-field>
         </v-col>
@@ -16,6 +17,7 @@
             v-model="tournament.participants"
             :disabled="tournament.type === 'mesclado'"
             label="Participantes"
+            :rules="tournamentParticipantRules"
             required
           ></v-text-field>
         </v-col>
@@ -62,6 +64,7 @@
               v-for="(award, i) in tournament.awards"
               :key="i"
               :label="'Premiação para o ' + Number(i + 1) + 'º lugar'"
+              :rules="tournamentAwardRules"
               v-model="award.award"
               required
             ></v-text-field>
@@ -79,6 +82,7 @@
           <v-text-field
             v-model="tournament.parameters.drawOffset"
             label="Limite para empate (entre 0.00 e 99.99)"
+            :rules="tournamentdrawOffsetRules"
             required
           ></v-text-field>
         </v-col>
@@ -86,6 +90,7 @@
           <v-text-field
             v-if="tournament.type === 'pontos'"
             v-model="tournament.parameters.relegationQuantity"
+            :rules="tournamentRelegationQualificationRules"
             label="Quantidade de times rebaixados"
             required
           ></v-text-field>
@@ -94,6 +99,7 @@
           <v-text-field
             v-if="tournament.type === 'pontos'"
             v-model="tournament.parameters.classificationQuantity"
+            :rules="tournamentRelegationQualificationRules"
             label="Quantidade de times que classificam para a Libertadores"
             required
           ></v-text-field>
@@ -126,6 +132,7 @@
               :key="i"
               v-model="round.correspondent"
               :label="'Rodada ' + Number(i + 1)"
+              :rules="tournamentCorrespondingRules"
               required
             ></v-text-field>
           </v-col>
@@ -137,6 +144,7 @@
               :key="i"
               v-model="round.correspondent"
               :label="'Jogo ' + Number(i + 1)"
+              :rules="tournamentCorrespondingRules"
               required
             ></v-text-field>
           </v-col>
@@ -148,6 +156,7 @@
               :key="i"
               v-model="round.correspondent"
               :label="'Jogo ' + Number(i + 1)"
+              :rules="tournamentCorrespondingRules"
               required
             ></v-text-field>
           </v-col>
@@ -159,14 +168,16 @@
               :key="i"
               v-model="round.correspondent"
               :label="'Jogo ' + Number(i + 1)"
+              :rules="tournamentCorrespondingRules"
               required
             ></v-text-field>
           </v-col>
         </div>
       </div>
-    </form>
+    </v-form>
 
     <v-btn
+      type="submit"
       class="tournament-create-form-button"
       :loading="loadingCreate"
       @click="save"
@@ -179,6 +190,49 @@ export default {
   props: ["loadingCreate"],
   data() {
     return {
+      tournamentNameRules: [
+        (value) => {
+          if (value?.length > 0) return true;
+
+          return "Digite o nome do campeonato";
+        },
+      ],
+      tournamentParticipantRules: [
+        (value) => {
+          if (this.tournament.type === "mesclado") return true;
+          if (value?.length > 0 && /[0-9-]+/.test(value)) return true;
+
+          return "Informe uma quantidade válida de participantes";
+        },
+      ],
+      tournamentAwardRules: [
+        (value) => {
+          if (value?.length > 0) return true;
+
+          return "Informe corretamente a premiação";
+        },
+      ],
+      tournamentdrawOffsetRules: [
+        (value) => {
+          if (value?.length > 0 && /[0-9-]+/.test(value)) return true;
+
+          return "Informe um valor válido de limite para empates";
+        },
+      ],
+      tournamentRelegationQualificationRules: [
+        (value) => {
+          if (value?.length > 0 && /[0-9-]+/.test(value)) return true;
+
+          return "Informe um valor válido para times rebaixados/classificados";
+        },
+      ],
+      tournamentCorrespondingRules: [
+        (value) => {
+          if (value?.length > 0 && /[0-9-]+/.test(value)) return true;
+
+          return "Informe uma rodada válida para a rodada correspondente";
+        },
+      ],
       tournament: {
         type: "pontos",
         awards: [
@@ -197,8 +251,9 @@ export default {
     };
   },
   methods: {
-    save() {
-      this.$emit("save", this.tournament);
+    async save() {
+      const isValid = await this.$refs.tournament.validate();
+      if (isValid) this.$emit("save", this.tournament);
     },
     changeType(type) {
       if (type === "mesclado") {
