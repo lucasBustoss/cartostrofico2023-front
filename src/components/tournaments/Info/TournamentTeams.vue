@@ -121,8 +121,10 @@ export default {
     },
     handleTeam(result) {
       this.selectedTeam = this.searchTeams.find(
-        (st) => st.name === result.name
+        (st) => st.teamId === result.teamId
       );
+
+      console.log(this.selectedTeam);
     },
     addTeam() {
       if (this.selectedTeam) {
